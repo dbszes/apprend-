@@ -1,1 +1,3203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Ziyad — Espace de travail</title>
+
+    <meta
+        name="description"
+        content="Plateforme de ressources, exercices, mémos et dossiers."
+    >
+
+    <style>
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+
+        :root {
+            --primary: #315efb;
+            --primary-dark: #2448cf;
+            --primary-soft: #edf2ff;
+
+            --text: #172033;
+            --muted: #697386;
+
+            --background: #f5f7fb;
+            --surface: #ffffff;
+            --surface-2: #f8faff;
+
+            --border: #e4e8f0;
+            --border-dark: #d6dce8;
+
+            --success: #1f9d68;
+            --warning: #d78b18;
+            --danger: #d94b5b;
+
+            --shadow-sm:
+                0 2px 8px rgba(20, 32, 55, .04);
+
+            --shadow:
+                0 12px 35px rgba(20, 32, 55, .07);
+
+            --shadow-lg:
+                0 24px 60px rgba(20, 32, 55, .12);
+
+            --radius-sm: 10px;
+            --radius: 16px;
+            --radius-lg: 22px;
+        }
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccd3df;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b7c0cf;
+        }
+
+        /* =========================================================
+           TOP HEADER
+        ========================================================= */
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            height: 74px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 32px;
+
+            background: rgba(255, 255, 255, .92);
+            border-bottom: 1px solid var(--border);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            min-width: 220px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 13px;
+
+            color: white;
+            background:
+                linear-gradient(
+                    135deg,
+                    #315efb,
+                    #6f8cff
+                );
+
+            box-shadow:
+                0 8px 18px rgba(49, 94, 251, .22);
+
+            font-weight: 800;
+            font-size: 17px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .brand-title {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: -.2px;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* =========================================================
+           BUTTONS
+        ========================================================= */
+
+        .btn {
+            border: 1px solid transparent;
+
+            min-height: 42px;
+            padding: 0 16px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            border-radius: 11px;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition:
+                transform .18s ease,
+                box-shadow .18s ease,
+                background .18s ease,
+                border-color .18s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            color: white;
+            background: var(--primary);
+
+            box-shadow:
+                0 7px 17px rgba(49, 94, 251, .18);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow:
+                0 10px 23px rgba(49, 94, 251, .25);
+        }
+
+        .btn-secondary {
+            color: var(--text);
+            background: white;
+            border-color: var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: #cbd3e0;
+            background: #fbfcff;
+        }
+
+        .btn-danger {
+            color: white;
+            background: var(--danger);
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+
+            color: var(--muted);
+            background: white;
+            border: 1px solid var(--border);
+
+            border-radius: 10px;
+        }
+
+        .btn-icon:hover {
+            color: var(--text);
+            background: #f8faff;
+        }
+
+        /* =========================================================
+           LAYOUT
+        ========================================================= */
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 74px);
+        }
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
+        .sidebar {
+            position: sticky;
+            top: 74px;
+
+            width: 250px;
+            height: calc(100vh - 74px);
+
+            padding: 24px 15px;
+
+            background: #fbfcfe;
+            border-right: 1px solid var(--border);
+
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 28px;
+        }
+
+        .sidebar-label {
+            padding: 0 12px;
+            margin-bottom: 9px;
+
+            color: #9aa3b3;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .nav-item {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            padding: 11px 12px;
+            margin-bottom: 3px;
+
+            border: 0;
+            border-radius: 11px;
+
+            color: #596579;
+            background: transparent;
+
+            font-size: 13px;
+            font-weight: 650;
+
+            text-align: left;
+
+            transition: .18s ease;
+        }
+
+        .nav-item:hover {
+            color: var(--text);
+            background: #f0f3f9;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+
+            display: grid;
+            place-items: center;
+
+            font-size: 16px;
+        }
+
+        .nav-count {
+            margin-left: auto;
+
+            min-width: 23px;
+            height: 21px;
+
+            display: grid;
+            place-items: center;
+
+            padding: 0 6px;
+
+            border-radius: 7px;
+
+            background: #eef1f6;
+            color: #727d8f;
+
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main {
+            flex: 1;
+            min-width: 0;
+
+            padding: 36px 42px 70px;
+        }
+
+        .main-inner {
+            width: min(1420px, 100%);
+            margin: 0 auto;
+        }
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+
+            min-height: 235px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 42px;
+
+            margin-bottom: 28px;
+
+            border-radius: var(--radius-lg);
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    #1c2e65 0%,
+                    #2947a4 48%,
+                    #4269dc 100%
+                );
+
+            box-shadow:
+                0 20px 50px rgba(31, 53, 115, .18);
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 400px;
+            height: 400px;
+
+            right: -120px;
+            top: -220px;
+
+            border: 1px solid rgba(255,255,255,.13);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 270px;
+            height: 270px;
+
+            right: 90px;
+            bottom: -190px;
+
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 670px;
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 7px 10px;
+
+            margin-bottom: 14px;
+
+            border-radius: 8px;
+
+            background: rgba(255,255,255,.1);
+
+            font-size: 10px;
+            font-weight: 800;
+
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .hero h1 {
+            margin-bottom: 9px;
+
+            font-size: clamp(28px, 4vw, 42px);
+            line-height: 1.08;
+
+            letter-spacing: -.035em;
+        }
+
+        .hero p {
+            max-width: 610px;
+
+            color: rgba(255,255,255,.74);
+
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .hero-side {
+            position: relative;
+            z-index: 2;
+
+            width: 155px;
+            height: 155px;
+
+            display: grid;
+            place-items: center;
+
+            margin-right: 25px;
+
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 28px;
+
+            background: rgba(255,255,255,.07);
+
+            font-size: 56px;
+        }
+
+        /* =========================================================
+           TOOLBAR
+        ========================================================= */
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+
+            margin-bottom: 23px;
+        }
+
+        .page-heading h2 {
+            font-size: 21px;
+            letter-spacing: -.025em;
+        }
+
+        .page-heading p {
+            margin-top: 4px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .search {
+            position: relative;
+            width: 280px;
+        }
+
+        .search input {
+            width: 100%;
+            height: 42px;
+
+            padding: 0 15px 0 39px;
+
+            border: 1px solid var(--border);
+            border-radius: 11px;
+
+            outline: none;
+
+            color: var(--text);
+            background: white;
+
+            font-size: 12px;
+
+            transition: .18s ease;
+        }
+
+        .search input:focus {
+            border-color: #aebdf0;
+
+            box-shadow:
+                0 0 0 4px rgba(49,94,251,.08);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #8b95a5;
+        }
+
+        /* =========================================================
+           CONTENT GRID
+        ========================================================= */
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin: 29px 0 13px;
+        }
+
+        .section-title h3 {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .section-title span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fill, minmax(240px, 1fr));
+
+            gap: 15px;
+        }
+
+        /* =========================================================
+           CARDS
+        ========================================================= */
+
+        .card {
+            position: relative;
+
+            min-height: 175px;
+
+            padding: 19px;
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            background: white;
+
+            box-shadow: var(--shadow-sm);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                border-color .2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+
+            border-color: #d6ddea;
+
+            box-shadow: var(--shadow);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            margin-bottom: 22px;
+        }
+
+        .card-icon {
+            width: 43px;
+            height: 43px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 12px;
+
+            font-size: 20px;
+        }
+
+        .folder-icon {
+            color: #bd8110;
+            background: #fff5db;
+        }
+
+        .exercise-icon {
+            color: #2c63c9;
+            background: #eaf2ff;
+        }
+
+        .memo-icon {
+            color: #258c62;
+            background: #e8f8f0;
+        }
+
+        .card-menu {
+            width: 31px;
+            height: 31px;
+
+            display: grid;
+            place-items: center;
+
+            border: 0;
+            border-radius: 8px;
+
+            color: #9ba4b3;
+            background: transparent;
+        }
+
+        .card-menu:hover {
+            color: var(--text);
+            background: #f2f4f8;
+        }
+
+        .card h4 {
+            margin-bottom: 7px;
+
+            font-size: 14px;
+            line-height: 1.35;
+        }
+
+        .card p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+
+            color: var(--muted);
+
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-top: 17px;
+
+            color: #919aaa;
+            font-size: 10px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+
+            padding: 4px 7px;
+
+            border-radius: 6px;
+
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .badge-folder {
+            color: #a36c00;
+            background: #fff4d5;
+        }
+
+        .badge-exercise {
+            color: #2b5ab1;
+            background: #edf3ff;
+        }
+
+        .badge-memo {
+            color: #237953;
+            background: #e8f7f0;
+        }
+
+        /* =========================================================
+           EMPTY STATE
+        ========================================================= */
+
+        .empty {
+            display: none;
+
+            padding: 55px 20px;
+
+            border: 1px dashed #d5dbe6;
+            border-radius: var(--radius);
+
+            background: rgba(255,255,255,.65);
+
+            text-align: center;
+        }
+
+        .empty.show {
+            display: block;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .empty h3 {
+            font-size: 15px;
+        }
+
+        .empty p {
+            margin-top: 5px;
+
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* =========================================================
+           LOGIN MODAL
+        ========================================================= */
+
+        .modal-layer {
+            position: fixed;
+            inset: 0;
+
+            z-index: 3000;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            background: rgba(11, 17, 31, .52);
+
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+        }
+
+        .modal-layer.show {
+            display: flex;
+        }
+
+        .login-box {
+            width: min(440px, 100%);
+
+            padding: 32px;
+
+            border: 1px solid rgba(255,255,255,.5);
+            border-radius: 22px;
+
+            background: white;
+
+            box-shadow: var(--shadow-lg);
+
+            animation: modalIn .22s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .login-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            margin-bottom: 26px;
+        }
+
+        .login-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .login-title-icon {
+            width: 44px;
+            height: 44px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 12px;
+
+            color: white;
+            background: var(--primary);
+        }
+
+        .login-header h2 {
+            font-size: 20px;
+        }
+
+        .login-header p {
+            margin-top: 3px;
+
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .close {
+            width: 34px;
+            height: 34px;
+
+            display: grid;
+            place-items: center;
+
+            border: 0;
+            border-radius: 9px;
+
+            background: #f2f4f8;
+            color: #687385;
+
+            font-size: 17px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #3b4659;
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 44px;
+
+            padding: 0 13px;
+
+            border: 1px solid var(--border);
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #fbfcfe;
+            color: var(--text);
+
+            font-size: 12px;
+
+            transition: .18s ease;
+        }
+
+        .form-input:focus {
+            border-color: #a9b9ef;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 4px rgba(49,94,251,.08);
+        }
+
+        .login-submit {
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .login-note {
+            margin-top: 14px;
+
+            color: #929baa;
+
+            font-size: 10px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .error-message {
+            display: none;
+
+            padding: 10px 12px;
+            margin-bottom: 14px;
+
+            border-radius: 9px;
+
+            color: #a92d3c;
+            background: #fff0f2;
+
+            font-size: 11px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* =========================================================
+           ADMIN BAR
+        ========================================================= */
+
+        .admin-bar {
+            display: none;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 14px 16px;
+            margin-bottom: 22px;
+
+            border: 1px solid #d9e2ff;
+            border-radius: 14px;
+
+            background: #f3f6ff;
+        }
+
+        .admin-bar.show {
+            display: flex;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .admin-avatar {
+            width: 35px;
+            height: 35px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 10px;
+
+            color: white;
+            background: var(--primary);
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .admin-info strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .admin-info span {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        /* =========================================================
+           ADMIN CREATE MODAL
+        ========================================================= */
+
+        .create-box {
+            width: min(600px, 100%);
+
+            padding: 29px;
+
+            border-radius: 21px;
+
+            background: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .create-tabs {
+            display: flex;
+            gap: 7px;
+
+            padding: 5px;
+
+            margin-bottom: 22px;
+
+            border-radius: 11px;
+
+            background: #f2f4f8;
+        }
+
+        .create-tab {
+            flex: 1;
+
+            height: 38px;
+
+            border: 0;
+            border-radius: 8px;
+
+            color: var(--muted);
+            background: transparent;
+
+            font-size: 11px;
+            font-weight: 750;
+        }
+
+        .create-tab.active {
+            color: var(--text);
+            background: white;
+
+            box-shadow:
+                0 2px 7px rgba(20,32,55,.07);
+        }
+
+        .color-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .color-choice {
+            width: 30px;
+            height: 30px;
+
+            border: 3px solid white;
+            outline: 1px solid #dce1e9;
+
+            border-radius: 50%;
+        }
+
+        .color-choice.selected {
+            outline: 2px solid var(--primary);
+        }
+
+        /* =========================================================
+           CONTENT VIEWER
+        ========================================================= */
+
+        .viewer {
+            display: none;
+        }
+
+        .viewer.show {
+            display: block;
+        }
+
+        .viewer-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            margin-bottom: 23px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid var(--border);
+            border-radius: 10px;
+
+            background: white;
+        }
+
+        .viewer-title h2 {
+            font-size: 21px;
+        }
+
+        .viewer-title p {
+            margin-top: 3px;
+
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .viewer-content {
+            padding: 28px;
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            background: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* =========================================================
+           RESPONSIVE TABLET
+        ========================================================= */
+
+        @media (max-width: 1050px) {
+
+            .sidebar {
+                width: 215px;
+            }
+
+            .main {
+                padding: 30px 25px 60px;
+            }
+
+            .hero {
+                padding: 32px;
+            }
+
+            .hero-side {
+                width: 125px;
+                height: 125px;
+                margin-right: 0;
+            }
+
+            .search {
+                width: 220px;
+            }
+        }
+
+        /* =========================================================
+           RESPONSIVE MOBILE
+        ========================================================= */
+
+        @media (max-width: 760px) {
+
+            .topbar {
+                height: 65px;
+                padding: 0 15px;
+            }
+
+            .brand {
+                min-width: auto;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .brand-logo {
+                width: 38px;
+                height: 38px;
+            }
+
+            .top-actions .btn {
+                min-height: 38px;
+                padding: 0 12px;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                position: static;
+
+                width: 100%;
+                height: auto;
+
+                display: flex;
+
+                padding: 9px 10px;
+
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+            .sidebar-section {
+                display: flex;
+                align-items: center;
+
+                margin: 0;
+            }
+
+            .sidebar-label {
+                display: none;
+            }
+
+            .nav-item {
+                flex-shrink: 0;
+
+                width: auto;
+
+                margin: 0 2px;
+            }
+
+            .nav-count {
+                display: none;
+            }
+
+            .main {
+                padding: 22px 15px 50px;
+            }
+
+            .hero {
+                min-height: auto;
+
+                padding: 28px 23px;
+
+                margin-bottom: 23px;
+            }
+
+            .hero-side {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 29px;
+            }
+
+            .hero p {
+                font-size: 12px;
+            }
+
+            .toolbar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .toolbar-actions {
+                width: 100%;
+            }
+
+            .search {
+                flex: 1;
+                width: auto;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-bar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .admin-actions {
+                width: 100%;
+            }
+
+            .admin-actions .btn {
+                flex: 1;
+            }
+        }
+
+        /* =========================================================
+           VERY SMALL
+        ========================================================= */
+
+        @media (max-width: 420px) {
+
+            .brand-title {
+                font-size: 13px;
+            }
+
+            .top-actions .btn {
+                font-size: 11px;
+            }
+
+            .hero {
+                border-radius: 17px;
+            }
+
+            .hero h1 {
+                font-size: 25px;
+            }
+
+            .card {
+                min-height: 155px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <header class="topbar">
+
+        <a href="#" class="brand">
+
+            <div class="brand-logo">
+                Z
+            </div>
+
+            <div class="brand-text">
+                <div class="brand-title">
+                    Ziyad
+                </div>
+
+                <div class="brand-subtitle">
+                    Espace de ressources
+                </div>
+            </div>
+
+        </a>
+
+        <div class="top-actions">
+
+            <button
+                class="btn btn-secondary"
+                id="loginButton"
+                onclick="openLogin()"
+            >
+                🔐
+                Se connecter
+            </button>
+
+            <button
+                class="btn btn-primary"
+                id="adminCreateButton"
+                style="display:none"
+                onclick="openCreate()"
+            >
+                ＋
+                Ajouter
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         LAYOUT
+    ========================================================== -->
+
+    <div class="layout">
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-label">
+                    Navigation
+                </div>
+
+                <button
+                    class="nav-item active"
+                    onclick="showHome()"
+                >
+                    <span class="nav-icon">⌂</span>
+                    <span>Accueil</span>
+                </button>
+
+            </div>
+
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-label">
+                    Ressources
+                </div>
+
+                <button
+                    class="nav-item"
+                    onclick="filterType('folder')"
+                >
+                    <span class="nav-icon">▣</span>
+                    <span>Dossiers</span>
+                    <span class="nav-count" id="folderCount">0</span>
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="filterType('exercise')"
+                >
+                    <span class="nav-icon">✓</span>
+                    <span>Exercices</span>
+                    <span class="nav-count" id="exerciseCount">0</span>
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="filterType('memo')"
+                >
+                    <span class="nav-icon">▤</span>
+                    <span>Mémos</span>
+                    <span class="nav-count" id="memoCount">0</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+
+        <main class="main">
+
+            <div class="main-inner">
+
+
+                <!-- =================================================
+                     HOME
+                ================================================== -->
+
+                <section id="homeView">
+
+
+                    <!-- HERO -->
+
+                    <div class="hero">
+
+                        <div class="hero-content">
+
+                            <div class="hero-kicker">
+                                ● ESPACE DE TRAVAIL
+                            </div>
+
+                            <h1>
+                                Bienvenue dans votre espace.
+                            </h1>
+
+                            <p>
+                                Retrouvez facilement vos dossiers,
+                                exercices et mémos depuis un seul
+                                endroit, avec une interface claire
+                                et adaptée à tous vos appareils.
+                            </p>
+
+                        </div>
+
+                        <div class="hero-side">
+                            ✦
+                        </div>
+
+                    </div>
+
+
+                    <!-- ADMIN -->
+
+                    <div
+                        class="admin-bar"
+                        id="adminBar"
+                    >
+
+                        <div class="admin-info">
+
+                            <div class="admin-avatar">
+                                ZH
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Ziyad Hamied
+                                </strong>
+
+                                <span>
+                                    Administrateur
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-actions">
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="openCreate()"
+                            >
+                                ＋ Nouveau contenu
+                            </button>
+
+                            <button
+                                class="btn btn-secondary"
+                                onclick="logout()"
+                            >
+                                Se déconnecter
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TOOLBAR -->
+
+                    <div class="toolbar">
+
+                        <div class="page-heading">
+
+                            <h2>
+                                Accueil
+                            </h2>
+
+                            <p id="resultText">
+                                Toutes les ressources disponibles
+                            </p>
+
+                        </div>
+
+
+                        <div class="toolbar-actions">
+
+                            <div class="search">
+
+                                <span class="search-icon">
+                                    ⌕
+                                </span>
+
+                                <input
+                                    id="searchInput"
+                                    type="search"
+                                    placeholder="Rechercher..."
+                                    oninput="searchContent()"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+
+                    <div id="contentArea">
+
+                        <!-- FOLDERS -->
+
+                        <div
+                            class="section-title"
+                            data-section="folder"
+                        >
+
+                            <h3>
+                                Dossiers
+                            </h3>
+
+                            <span>
+                                Organiser les ressources
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="grid"
+                            id="folderGrid"
+                        ></div>
+
+
+                        <!-- EXERCISES -->
+
+                        <div
+                            class="section-title"
+                            data-section="exercise"
+                        >
+
+                            <h3>
+                                Exercices
+                            </h3>
+
+                            <span>
+                                Questions et entraînement
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="grid"
+                            id="exerciseGrid"
+                        ></div>
+
+
+                        <!-- MEMOS -->
+
+                        <div
+                            class="section-title"
+                            data-section="memo"
+                        >
+
+                            <h3>
+                                Mémos
+                            </h3>
+
+                            <span>
+                                Fiches et informations
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="grid"
+                            id="memoGrid"
+                        ></div>
+
+
+                        <!-- EMPTY -->
+
+                        <div
+                            class="empty"
+                            id="emptyState"
+                        >
+
+                            <div class="empty-icon">
+                                ⌕
+                            </div>
+
+                            <h3>
+                                Aucun résultat
+                            </h3>
+
+                            <p>
+                                Essayez une autre recherche.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     VIEWER
+                ================================================== -->
+
+                <section
+                    class="viewer"
+                    id="viewer"
+                >
+
+                    <div class="viewer-header">
+
+                        <button
+                            class="back-btn"
+                            onclick="showHome()"
+                        >
+                            ←
+                        </button>
+
+                        <div class="viewer-title">
+
+                            <h2 id="viewerTitle">
+                                Contenu
+                            </h2>
+
+                            <p id="viewerSubtitle">
+                                Ressource
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="viewer-content"
+                        id="viewerContent"
+                    ></div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================
+         LOGIN MODAL
+    ========================================================== -->
+
+    <div
+        class="modal-layer"
+        id="loginModal"
+        onclick="closeOutside(event, 'loginModal')"
+    >
+
+        <div class="login-box">
+
+            <div class="login-header">
+
+                <div class="login-title">
+
+                    <div class="login-title-icon">
+                        🔐
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Connexion admin
+                        </h2>
+
+                        <p>
+                            Accès réservé à l'administration
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="close"
+                    onclick="closeLogin()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="error-message"
+                id="loginError"
+            >
+                Identifiants incorrects.
+            </div>
+
+
+            <form onsubmit="login(event)">
+
+                <div class="form-group">
+
+                    <label for="firstName">
+                        Prénom
+                    </label>
+
+                    <input
+                        class="form-input"
+                        id="firstName"
+                        type="text"
+                        placeholder="Prénom"
+                        autocomplete="given-name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="lastName">
+                        Nom
+                    </label>
+
+                    <input
+                        class="form-input"
+                        id="lastName"
+                        type="text"
+                        placeholder="Nom"
+                        autocomplete="family-name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Adresse e-mail
+                    </label>
+
+                    <input
+                        class="form-input"
+                        id="email"
+                        type="email"
+                        placeholder="administrateur@exemple.fr"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Mot de passe
+                    </label>
+
+                    <input
+                        class="form-input"
+                        id="password"
+                        type="password"
+                        placeholder="••••••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    class="btn btn-primary login-submit"
+                    type="submit"
+                >
+                    Se connecter
+                </button>
+
+            </form>
+
+
+            <div class="login-note">
+                La connexion sécurisée avec Supabase sera ajoutée
+                dans la version connectée.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         CREATE MODAL
+    ========================================================== -->
+
+    <div
+        class="modal-layer"
+        id="createModal"
+        onclick="closeOutside(event, 'createModal')"
+    >
+
+        <div class="create-box">
+
+            <div class="login-header">
+
+                <div>
+
+                    <h2>
+                        Nouveau contenu
+                    </h2>
+
+                    <p>
+                        Ajoutez une ressource à l'accueil.
+                    </p>
+
+                </div>
+
+                <button
+                    class="close"
+                    onclick="closeCreate()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="create-tabs">
+
+                <button
+                    class="create-tab active"
+                    id="tabFolder"
+                    onclick="setCreateType('folder')"
+                >
+                    📁 Dossier
+                </button>
+
+                <button
+                    class="create-tab"
+                    id="tabExercise"
+                    onclick="setCreateType('exercise')"
+                >
+                    ✓ Exercice
+                </button>
+
+                <button
+                    class="create-tab"
+                    id="tabMemo"
+                    onclick="setCreateType('memo')"
+                >
+                    ▤ Mémo
+                </button>
+
+            </div>
+
+
+            <form onsubmit="createContent(event)">
+
+                <div class="form-group">
+
+                    <label>
+                        Nom
+                    </label>
+
+                    <input
+                        class="form-input"
+                        id="contentName"
+                        type="text"
+                        placeholder="Nom du contenu"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        class="form-input"
+                        id="contentDescription"
+                        rows="4"
+                        placeholder="Description..."
+                        style="height:auto;padding-top:12px"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Couleur
+                    </label>
+
+                    <div class="color-row">
+
+                        <button
+                            type="button"
+                            class="color-choice selected"
+                            data-color="#315efb"
+                            style="background:#315efb"
+                            onclick="chooseColor(this)"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="color-choice"
+                            data-color="#7c5cff"
+                            style="background:#7c5cff"
+                            onclick="chooseColor(this)"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="color-choice"
+                            data-color="#19a974"
+                            style="background:#19a974"
+                            onclick="chooseColor(this)"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="color-choice"
+                            data-color="#e49b22"
+                            style="background:#e49b22"
+                            onclick="chooseColor(this)"
+                        ></button>
+
+                        <button
+                            type="button"
+                            class="color-choice"
+                            data-color="#e45b6d"
+                            style="background:#e45b6d"
+                            onclick="chooseColor(this)"
+                        ></button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                    style="width:100%"
+                >
+                    Créer le contenu
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script>
+
+        /*
+         * ---------------------------------------------------------
+         * DONNÉES DE DÉMONSTRATION
+         * ---------------------------------------------------------
+         *
+         * Cette partie sera remplacée par Supabase.
+         */
+
+        let content = [
+
+            {
+                id: 1,
+                type: "folder",
+                name: "Mathématiques",
+                description:
+                    "Cours, exercices et fiches de mathématiques.",
+                color: "#315efb",
+                children: []
+            },
+
+            {
+                id: 2,
+                type: "folder",
+                name: "Français",
+                description:
+                    "Ressources de français et fiches de révision.",
+                color: "#7c5cff",
+                children: []
+            },
+
+            {
+                id: 3,
+                type: "folder",
+                name: "Sciences",
+                description:
+                    "Documents et activités scientifiques.",
+                color: "#19a974",
+                children: []
+            },
+
+            {
+                id: 4,
+                type: "exercise",
+                name: "Exercice de calcul",
+                description:
+                    "Entraînement sur les opérations et priorités.",
+                color: "#315efb"
+            },
+
+            {
+                id: 5,
+                type: "exercise",
+                name: "Questions de révision",
+                description:
+                    "Quelques questions pour vérifier vos connaissances.",
+                color: "#e49b22"
+            },
+
+            {
+                id: 6,
+                type: "memo",
+                name: "Mémo — Formules",
+                description:
+                    "Les principales formules à connaître.",
+                color: "#19a974"
+            },
+
+            {
+                id: 7,
+                type: "memo",
+                name: "Mémo — Méthode",
+                description:
+                    "Une fiche avec les méthodes importantes.",
+                color: "#7c5cff"
+            }
+
+        ];
+
+
+        /*
+         * ---------------------------------------------------------
+         * ÉTAT
+         * ---------------------------------------------------------
+         */
+
+        let isAdmin = false;
+        let currentType = "folder";
+        let selectedColor = "#315efb";
+
+
+        /*
+         * ---------------------------------------------------------
+         * INITIALISATION
+         * ---------------------------------------------------------
+         */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+
+                renderContent();
+                updateCounts();
+
+            }
+        );
+
+
+        /*
+         * ---------------------------------------------------------
+         * LOGIN
+         * ---------------------------------------------------------
+         *
+         * Pour la démo uniquement.
+         *
+         * IMPORTANT :
+         * ne mets pas un vrai mot de passe Supabase ici.
+         * L'authentification réelle sera faite côté Supabase.
+         */
+
+        function openLogin() {
+
+            document
+                .getElementById("loginModal")
+                .classList
+                .add("show");
+
+            setTimeout(
+                () => {
+                    document
+                        .getElementById("firstName")
+                        .focus();
+                },
+                100
+            );
+        }
+
+
+        function closeLogin() {
+
+            document
+                .getElementById("loginModal")
+                .classList
+                .remove("show");
+
+            document
+                .getElementById("loginError")
+                .classList
+                .remove("show");
+        }
+
+
+        function login(event) {
+
+            event.preventDefault();
+
+            const firstName =
+                document
+                    .getElementById("firstName")
+                    .value
+                    .trim()
+                    .toLowerCase();
+
+            const lastName =
+                document
+                    .getElementById("lastName")
+                    .value
+                    .trim()
+                    .toLowerCase();
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
+
+
+            /*
+             * Démo :
+             * seul le nom/prénom sont vérifiés ici.
+             *
+             * À remplacer par :
+             * supabase.auth.signInWithPassword(...)
+             */
+
+            if (
+                firstName === "ziyad" &&
+                lastName === "hamied" &&
+                email.length > 3 &&
+                password.length >= 4
+            ) {
+
+                isAdmin = true;
+
+                localStorage.setItem(
+                    "adminSession",
+                    "true"
+                );
+
+                closeLogin();
+
+                activateAdmin();
+
+            } else {
+
+                document
+                    .getElementById("loginError")
+                    .classList
+                    .add("show");
+
+            }
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * ADMIN
+         * ---------------------------------------------------------
+         */
+
+        function activateAdmin() {
+
+            document
+                .getElementById("adminBar")
+                .classList
+                .add("show");
+
+            document
+                .getElementById("adminCreateButton")
+                .style
+                .display = "inline-flex";
+
+            document
+                .getElementById("loginButton")
+                .style
+                .display = "none";
+
+        }
+
+
+        function logout() {
+
+            isAdmin = false;
+
+            localStorage.removeItem(
+                "adminSession"
+            );
+
+            document
+                .getElementById("adminBar")
+                .classList
+                .remove("show");
+
+            document
+                .getElementById("adminCreateButton")
+                .style
+                .display = "none";
+
+            document
+                .getElementById("loginButton")
+                .style
+                .display = "inline-flex";
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * CREATE
+         * ---------------------------------------------------------
+         */
+
+        function openCreate() {
+
+            if (!isAdmin) {
+                openLogin();
+                return;
+            }
+
+            document
+                .getElementById("createModal")
+                .classList
+                .add("show");
+
+        }
+
+
+        function closeCreate() {
+
+            document
+                .getElementById("createModal")
+                .classList
+                .remove("show");
+
+        }
+
+
+        function setCreateType(type) {
+
+            currentType = type;
+
+            document
+                .getElementById("tabFolder")
+                .classList
+                .remove("active");
+
+            document
+                .getElementById("tabExercise")
+                .classList
+                .remove("active");
+
+            document
+                .getElementById("tabMemo")
+                .classList
+                .remove("active");
+
+
+            const selected = {
+
+                folder:
+                    "tabFolder",
+
+                exercise:
+                    "tabExercise",
+
+                memo:
+                    "tabMemo"
+
+            }[type];
+
+
+            document
+                .getElementById(selected)
+                .classList
+                .add("active");
+
+        }
+
+
+        function chooseColor(element) {
+
+            document
+                .querySelectorAll(".color-choice")
+                .forEach(
+                    item =>
+                        item
+                            .classList
+                            .remove("selected")
+                );
+
+
+            element
+                .classList
+                .add("selected");
+
+            selectedColor =
+                element.dataset.color;
+
+        }
+
+
+        function createContent(event) {
+
+            event.preventDefault();
+
+            if (!isAdmin) {
+                return;
+            }
+
+            const name =
+                document
+                    .getElementById("contentName")
+                    .value
+                    .trim();
+
+            const description =
+                document
+                    .getElementById("contentDescription")
+                    .value
+                    .trim();
+
+
+            const item = {
+
+                id:
+                    Date.now(),
+
+                type:
+                    currentType,
+
+                name:
+                    name,
+
+                description:
+                    description ||
+                    "Nouvelle ressource.",
+
+                color:
+                    selectedColor
+
+            };
+
+
+            content.unshift(item);
+
+            renderContent();
+            updateCounts();
+
+            closeCreate();
+
+
+            document
+                .getElementById("contentName")
+                .value = "";
+
+            document
+                .getElementById("contentDescription")
+                .value = "";
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * RENDER
+         * ---------------------------------------------------------
+         */
+
+        function renderContent(
+            list = content
+        ) {
+
+            const folderGrid =
+                document.getElementById(
+                    "folderGrid"
+                );
+
+            const exerciseGrid =
+                document.getElementById(
+                    "exerciseGrid"
+                );
+
+            const memoGrid =
+                document.getElementById(
+                    "memoGrid"
+                );
+
+
+            folderGrid.innerHTML = "";
+            exerciseGrid.innerHTML = "";
+            memoGrid.innerHTML = "";
+
+
+            const folders =
+                list.filter(
+                    item =>
+                        item.type === "folder"
+                );
+
+            const exercises =
+                list.filter(
+                    item =>
+                        item.type === "exercise"
+                );
+
+            const memos =
+                list.filter(
+                    item =>
+                        item.type === "memo"
+                );
+
+
+            folders.forEach(
+                item =>
+                    folderGrid.appendChild(
+                        createCard(item)
+                    )
+            );
+
+
+            exercises.forEach(
+                item =>
+                    exerciseGrid.appendChild(
+                        createCard(item)
+                    )
+            );
+
+
+            memos.forEach(
+                item =>
+                    memoGrid.appendChild(
+                        createCard(item)
+                    )
+            );
+
+
+            document
+                .querySelector(
+                    '[data-section="folder"]'
+                )
+                .style.display =
+                folders.length
+                    ? ""
+                    : "none";
+
+
+            document
+                .querySelector(
+                    '[data-section="exercise"]'
+                )
+                .style.display =
+                exercises.length
+                    ? ""
+                    : "none";
+
+
+            document
+                .querySelector(
+                    '[data-section="memo"]'
+                )
+                .style.display =
+                memos.length
+                    ? ""
+                    : "none";
+
+
+            document
+                .getElementById("emptyState")
+                .classList
+                .toggle(
+                    "show",
+                    list.length === 0
+                );
+
+        }
+
+
+        function createCard(item) {
+
+            const card =
+                document.createElement("article");
+
+            card.className = "card";
+
+            const icon =
+                item.type === "folder"
+                    ? "▣"
+                    : item.type === "exercise"
+                        ? "✓"
+                        : "▤";
+
+
+            const badge =
+                item.type === "folder"
+                    ? "Dossier"
+                    : item.type === "exercise"
+                        ? "Exercice"
+                        : "Mémo";
+
+
+            const iconClass =
+                item.type === "folder"
+                    ? "folder-icon"
+                    : item.type === "exercise"
+                        ? "exercise-icon"
+                        : "memo-icon";
+
+
+            card.innerHTML = `
+
+                <div class="card-top">
+
+                    <div
+                        class="card-icon ${iconClass}"
+                        style="
+                            color:${item.color};
+                            background:${item.color}18;
+                        "
+                    >
+                        ${icon}
+                    </div>
+
+                    <button
+                        class="card-menu"
+                        onclick="openItemMenu(event, ${item.id})"
+                    >
+                        •••
+                    </button>
+
+                </div>
+
+                <h4>
+                    ${escapeHTML(item.name)}
+                </h4>
+
+                <p>
+                    ${escapeHTML(item.description)}
+                </p>
+
+                <div class="card-footer">
+
+                    <span
+                        class="badge ${
+
+                            item.type === "folder"
+                                ? "badge-folder"
+                                : item.type === "exercise"
+                                    ? "badge-exercise"
+                                    : "badge-memo"
+
+                        }"
+                    >
+                        ${badge}
+                    </span>
+
+                    <span>
+                        Ouvrir →
+                    </span>
+
+                </div>
+            `;
+
+
+            card.addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        event.target.closest(
+                            ".card-menu"
+                        )
+                    ) {
+                        return;
+                    }
+
+                    openItem(item);
+
+                }
+            );
+
+
+            return card;
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * OPEN CONTENT
+         * ---------------------------------------------------------
+         */
+
+        function openItem(item) {
+
+            document
+                .getElementById("homeView")
+                .style
+                .display = "none";
+
+            const viewer =
+                document.getElementById(
+                    "viewer"
+                );
+
+            viewer.classList.add("show");
+
+
+            document
+                .getElementById("viewerTitle")
+                .textContent =
+                item.name;
+
+
+            document
+                .getElementById("viewerSubtitle")
+                .textContent =
+                item.type === "folder"
+                    ? "Dossier"
+                    : item.type === "exercise"
+                        ? "Exercice"
+                        : "Mémo";
+
+
+            const viewerContent =
+                document.getElementById(
+                    "viewerContent"
+                );
+
+
+            if (item.type === "folder") {
+
+                viewerContent.innerHTML = `
+
+                    <h3 style="margin-bottom:10px">
+                        ${escapeHTML(item.name)}
+                    </h3>
+
+                    <p style="
+                        color:#697386;
+                        font-size:13px;
+                        line-height:1.7;
+                    ">
+                        ${escapeHTML(item.description)}
+                    </p>
+
+                    <div style="
+                        margin-top:25px;
+                        padding:18px;
+                        border:1px dashed #d8deea;
+                        border-radius:13px;
+                        color:#697386;
+                        font-size:12px;
+                    ">
+                        Ce dossier pourra contenir
+                        d'autres dossiers, des exercices
+                        et des mémos.
+                    </div>
+
+                `;
+
+            } else if (item.type === "exercise") {
+
+                viewerContent.innerHTML = `
+
+                    <div style="
+                        margin-bottom:25px;
+                    ">
+
+                        <div style="
+                            display:inline-flex;
+                            padding:5px 8px;
+                            border-radius:6px;
+                            background:#edf3ff;
+                            color:#315ebf;
+                            font-size:10px;
+                            font-weight:800;
+                        ">
+                            EXERCICE
+                        </div>
+
+                    </div>
+
+                    <h3 style="
+                        margin-bottom:14px;
+                    ">
+                        Question
+                    </h3>
+
+                    <p style="
+                        color:#4d586b;
+                        font-size:14px;
+                        line-height:1.7;
+                    ">
+                        ${escapeHTML(item.description)}
+                    </p>
+
+                    <div style="
+                        margin-top:25px;
+                    ">
+
+                        <input
+                            class="form-input"
+                            placeholder="Votre réponse..."
+                        >
+
+                    </div>
+
+                    <button
+                        class="btn btn-primary"
+                        style="margin-top:12px"
+                    >
+                        Vérifier la réponse
+                    </button>
+
+                `;
+
+            } else {
+
+                viewerContent.innerHTML = `
+
+                    <article style="
+                        max-width:850px;
+                    ">
+
+                        <h3 style="
+                            font-size:24px;
+                            margin-bottom:18px;
+                        ">
+                            ${escapeHTML(item.name)}
+                        </h3>
+
+                        <p style="
+                            color:#4e596b;
+                            line-height:1.85;
+                            font-size:14px;
+                        ">
+                            ${escapeHTML(item.description)}
+                        </p>
+
+                        <hr style="
+                            border:0;
+                            border-top:1px solid #e5e8ee;
+                            margin:25px 0;
+                        ">
+
+                        <p style="
+                            color:#697386;
+                            line-height:1.8;
+                            font-size:13px;
+                        ">
+                            Les mémos pourront ensuite contenir
+                            du texte riche, des images, des liens,
+                            des vidéos YouTube et des fichiers.
+                        </p>
+
+                    </article>
+
+                `;
+
+            }
+
+        }
+
+
+        function showHome() {
+
+            document
+                .getElementById("viewer")
+                .classList
+                .remove("show");
+
+            document
+                .getElementById("homeView")
+                .style
+                .display = "block";
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * SEARCH
+         * ---------------------------------------------------------
+         */
+
+        function searchContent() {
+
+            const query =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+
+            if (!query) {
+
+                renderContent();
+
+                document
+                    .getElementById("resultText")
+                    .textContent =
+                    "Toutes les ressources disponibles";
+
+                return;
+
+            }
+
+
+            const filtered =
+                content.filter(
+                    item =>
+                        item.name
+                            .toLowerCase()
+                            .includes(query)
+                        ||
+                        item.description
+                            .toLowerCase()
+                            .includes(query)
+                );
+
+
+            renderContent(filtered);
+
+
+            document
+                .getElementById("resultText")
+                .textContent =
+                filtered.length +
+                " résultat" +
+                (
+                    filtered.length > 1
+                        ? "s"
+                        : ""
+                );
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * FILTER
+         * ---------------------------------------------------------
+         */
+
+        function filterType(type) {
+
+            const filtered =
+                content.filter(
+                    item =>
+                        item.type === type
+                );
+
+
+            renderContent(filtered);
+
+
+            document
+                .getElementById("resultText")
+                .textContent =
+                filtered.length +
+                " ressource" +
+                (
+                    filtered.length > 1
+                        ? "s"
+                        : ""
+                );
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * COUNTS
+         * ---------------------------------------------------------
+         */
+
+        function updateCounts() {
+
+            document
+                .getElementById("folderCount")
+                .textContent =
+                content.filter(
+                    x => x.type === "folder"
+                ).length;
+
+
+            document
+                .getElementById("exerciseCount")
+                .textContent =
+                content.filter(
+                    x => x.type === "exercise"
+                ).length;
+
+
+            document
+                .getElementById("memoCount")
+                .textContent =
+                content.filter(
+                    x => x.type === "memo"
+                ).length;
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * MENU
+         * ---------------------------------------------------------
+         */
+
+        function openItemMenu(
+            event,
+            id
+        ) {
+
+            event.stopPropagation();
+
+            const item =
+                content.find(
+                    x => x.id === id
+                );
+
+
+            if (!item) {
+                return;
+            }
+
+
+            if (!isAdmin) {
+
+                openItem(item);
+
+                return;
+
+            }
+
+
+            const action =
+                confirm(
+                    "Voulez-vous supprimer cette ressource ?"
+                );
+
+
+            if (action) {
+
+                content =
+                    content.filter(
+                        x => x.id !== id
+                    );
+
+                renderContent();
+                updateCounts();
+
+            }
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * OUTSIDE CLICK
+         * ---------------------------------------------------------
+         */
+
+        function closeOutside(
+            event,
+            id
+        ) {
+
+            if (
+                event.target.id === id
+            ) {
+
+                document
+                    .getElementById(id)
+                    .classList
+                    .remove("show");
+
+            }
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * HTML SECURITY
+         * ---------------------------------------------------------
+         */
+
+        function escapeHTML(value) {
+
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * RESTORE DEMO SESSION
+         * ---------------------------------------------------------
+         */
+
+        if (
+            localStorage.getItem(
+                "adminSession"
+            ) === "true"
+        ) {
+
+            isAdmin = true;
+
+            activateAdmin();
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * ESCAPE KEY
+         * ---------------------------------------------------------
+         */
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key !== "Escape"
+                ) {
+                    return;
+                }
+
+                closeLogin();
+                closeCreate();
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>
